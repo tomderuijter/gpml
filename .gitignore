@@ -1,3 +1,6 @@
+# Joblib
+.cache/
+
 # OS X
 .DS_Store
 

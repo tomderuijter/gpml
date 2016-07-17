@@ -3,7 +3,7 @@ import itertools
 import pandas as pd
 import joblib as jl
 
-cache_dir = '../.cache/'
+cache_dir = './.cache/'
 memory = jl.Memory(cachedir=cache_dir)
 
 
