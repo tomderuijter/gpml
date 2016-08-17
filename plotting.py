@@ -66,7 +66,7 @@ def plot_area(dataset, request, area_prediction):
     )
     plt.clabel(cs, fontsize=11)
 
-    cb = plt.colorbar()
+    cb = plt.colorbar(sp)
     cb.set_label('Temperature error')
     plt.xlim([left_lon, right_lon])
     plt.ylim([bot_lat, top_lat])

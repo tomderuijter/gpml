@@ -116,7 +116,7 @@ def construct_dataset_column_names(request):
     feature_cols = get_feature_columns(request)
     dataset_column_names = [
         'station_id', 'latitude', 'longitude',
-        'elevation', 'forecast_hour', 'valid_date'
+        'elevation', 'forecast_hour', 'valid_date', 'issue_date'
     ]
     dataset_column_names += [observation_column] + feature_cols
     return dataset_column_names
