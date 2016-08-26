@@ -178,6 +178,48 @@ def load_dataset(request):
     return forecast_data
 
 
+def split_dataset(dataset, feature_cols, obs_col):
+    station_ids = dataset.station_id.unique()
+    train_stations, test_stations = sklearn.cross_validation.train_test_split(
+        station_ids, test_size=0.20
+    )
+
+    X_train = dataset.loc[
+        dataset.station_id.isin(train_stations),
+        feature_cols
+    ].values
+
+    X_test = dataset.loc[
+        dataset.station_id.isin(test_stations),
+        feature_cols
+    ].values
+
+    y_train = dataset.loc[
+        dataset.station_id.isin(train_stations),
+        [obs_col]
+    ].values
+
+    y_test = dataset.loc[
+        dataset.station_id.isin(test_stations),
+        [obs_col]
+    ].values
+    return X_train, X_test, y_train, y_test
+
+
+def filter_valid_dates(df, request):
+    assert 'longitude' in df.columns and 'latitude' in df.columns
+    spatial_df = df[(df.valid_date >= request['start']) & (
+    df.valid_date <= request['end'])].copy()
+    assert len(spatial_df) > 0, "date range [%s - %s] not included in data" % (
+    request['start'], request['end'])
+    print("Selected %d valid date(s)." % len(spatial_df.valid_date.unique()))
+    return spatial_df
+
+
+def filter_forecast_hours(df, request):
+    return df[df.forecast_hour.isin(request['forecast_hours'])].copy()
+
+
 if __name__ == "__main__":
     test_request = {
         'predictant': 'TT2m',
