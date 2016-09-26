@@ -1,8 +1,10 @@
-import logging
 import itertools
+import logging
+
+import joblib as jl
 import numpy as np
 import pandas as pd
-import joblib as jl
+import sklearn
 
 cache_dir = './.cache/'
 memory = jl.Memory(cachedir=cache_dir)
