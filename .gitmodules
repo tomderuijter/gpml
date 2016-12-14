@@ -1,0 +1,3 @@
+[submodule "python-dem-raycast"]
+	path = python-dem-raycast
+	url = git@github.com:tomderuijter/python-dem-raycast.git
