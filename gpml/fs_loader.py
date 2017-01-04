@@ -146,7 +146,7 @@ def clean_data(data):
 
 
 def filter_locations(df, area):
-    top_lat, bot_lat, left_lon, right_lon = area
+    bot_lat, top_lat, left_lon, right_lon = area
     return df[
         (df.latitude >= bot_lat) & (df.latitude <= top_lat) &
         (df.longitude >= left_lon) & (df.longitude <= right_lon)
@@ -161,7 +161,13 @@ def load_dataset(request):
     column_names = construct_dataset_column_names(request)
 
     forecast_data = pd.DataFrame()
-    for forecast_hour in request['forecast_hours']:
+
+    if 'forecast_hours' in request:
+        forecast_hours = request['forecast_hours']
+    else:
+        forecast_hours = [request['forecast_hour']]
+
+    for forecast_hour in forecast_hours:
         logging.info("Loading files for forecast hour %d.." % forecast_hour)
         fh_data = load_dataset_for_forecast_hour(forecast_hour, request)
 
@@ -180,10 +186,10 @@ def load_dataset(request):
     return forecast_data
 
 
-def split_dataset(dataset, feature_cols, obs_col):
+def split_dataset(dataset, feature_cols, obs_col, ratio=0.2, random_seed=None):
     station_ids = dataset.station_id.unique()
     train_stations, test_stations = sklearn.cross_validation.train_test_split(
-        station_ids, test_size=0.20
+        station_ids, test_size=ratio, random_state=random_seed
     )
 
     X_train = dataset.loc[
